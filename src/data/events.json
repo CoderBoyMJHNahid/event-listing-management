@@ -1,0 +1,36 @@
+[
+  {
+    "id": "5a491249-91c5-42d9-b4cf-3d647b490eb5",
+    "thumbnail": "https://images.unsplash.com/photo-1524123143649-3b6ed278f40c?fm=jpg&amp;q=60&amp;w=3000&amp;ixlib=rb-4.1.0&amp;ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8YnJpZHxlbnwwfHwwfHx8MA%3D%3D",
+    "title": "Testing posts 2",
+    "description": "<p><img src=\"https://images.unsplash.com/photo-1524123143649-3b6ed278f40c?fm=jpg&amp;q=60&amp;w=3000&amp;ixlib=rb-4.1.0&amp;ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8YnJpZHxlbnwwfHwwfHx8MA%3D%3D\" style=\"width: 25%;\"></p><p><span style=\"color: rgb(85, 85, 85); font-family: Jotia_Regular, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, Roboto, Oxygen, Ubuntu, Cantarell, &quot;Fira Sans&quot;, &quot;Droid Sans&quot;, &quot;Helvetica Neue&quot;, poppins, sans-serif; font-size: 15px; text-align: justify; background-color: rgb(231, 231, 231);\">University of Scholars has started its journey in 2015 with five departments at the outset. The Trustee Board of the university aims to establish a research-intensive modern private university for Bangladeshi as well as international students which will produce world-class researchers and industry leading professionals. The university is working with the slogan- We Build Professionals, and following American curriculum with strong emphasis on the use of technology for teaching and learning process. Therefore, we are adopting the newest educational technologies (EdTech) to modernize our Learning Management System (LMS) for the best experience of learning as well as teaching. This is the first initiative of such kind in Bangladesh. Our congenial atmosphere and flexible policy inspire the faculty members who are highly qualified having academic degrees and professional training from home and abroad.</span></p>",
+    "category": "739f58dd-d025-439d-b499-91b2727f00f0",
+    "type": "New",
+    "date": "2025-05-17"
+  },
+  {
+    "id": "ac1eccef-80c7-4cc1-8a04-297ccea32222",
+    "thumbnail": "https://m.media-amazon.com/images/I/71s2v4JQOLL.jpg",
+    "title": "Testing posts 3",
+    "category": "739f58dd-d025-439d-b499-91b2727f00f0",
+    "type": "Up Coming",
+    "date": "2025-05-18"
+  },
+  {
+    "id": "2fb6131e-9dc4-4e5a-8687-b61053e905f2",
+    "thumbnail": null,
+    "title": "Testing posts 3",
+    "category": "eece81c9-f69a-4426-93e2-f3d024179e06",
+    "type": "New",
+    "date": "2025-05-17"
+  },
+  {
+    "id": "dc6266a2-146a-4790-8299-777ceb647292",
+    "thumbnail": "http://localhost:3000/api/uploads/1747505366254-981842769.webp",
+    "title": "Final event",
+    "description": "<p>Hello I am nahid</p><p><img src=\"http://localhost:3000/api/uploads/1747505366254-981842769.webp\" style=\"width: 300px;\"><br></p>",
+    "category": "eece81c9-f69a-4426-93e2-f3d024179e06",
+    "type": "New",
+    "date": "2025-05-18"
+  }
+]

@@ -182,7 +182,6 @@ const deleteGallery = async (req, res) => {
       });
     }
 
-    // Find the gallery item by ID
     const galleryIndex = data.findIndex((item) => item.id === id);
     if (galleryIndex === -1) {
       return res.status(404).json({
@@ -191,10 +190,8 @@ const deleteGallery = async (req, res) => {
       });
     }
 
-    // Get the deleted item before removing it
     const deletedItem = data[galleryIndex];
 
-    // Delete the image file from uploads directory
     const uploadsDir = path.join(process.cwd(), 'public/uploads');
     const imagePath = path.join(uploadsDir, deletedItem.image);
 
@@ -206,10 +203,8 @@ const deleteGallery = async (req, res) => {
       }
     }
 
-    // Remove the item from the array
     data.splice(galleryIndex, 1);
 
-    // Write back to the file
     fs.writeFileSync(galleryFilePath, JSON.stringify(data, null, 2));
 
     res.status(200).json({
