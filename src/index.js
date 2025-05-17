@@ -5,6 +5,7 @@ import catRoute from './routes/category.routes.js';
 import { fileURLToPath } from 'url';
 import path from 'path';
 import galleryRoute from './routes/gallery.routes.js';
+import eventRoute from './routes/event.routes.js';
 
 const app = express();
 
@@ -27,6 +28,7 @@ const port = process.env.PORT || 3000;
 
 app.use('/api/category', catRoute);
 app.use('/api/gallery', galleryRoute);
+app.use('/api/events', eventRoute);
 
 app.get('/', (req, res) => {
   res.send('All goes well');

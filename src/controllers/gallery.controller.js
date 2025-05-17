@@ -114,7 +114,6 @@ const updateGallery = async (req, res) => {
       categoryName,
     };
 
-    // If a new image was uploaded, handle it
     if (imageFile) {
       // Delete the old image if it exists
       const uploadsDir = path.join(process.cwd(), 'public/uploads');
@@ -128,14 +127,11 @@ const updateGallery = async (req, res) => {
         }
       }
 
-      // Update with new image
       updatedItem.image = imageFile.filename;
     }
 
-    // Update the gallery data
     galleryData[galleryIndex] = updatedItem;
 
-    // Write back to the file
     fs.writeFileSync(galleryFilePath, JSON.stringify(galleryData, null, 2));
 
     res.status(200).json({
