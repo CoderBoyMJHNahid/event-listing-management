@@ -5,6 +5,18 @@
   },
   {
     "id": "eece81c9-f69a-4426-93e2-f3d024179e06",
-    "name": "Admission"
+    "name": "Seminar"
+  },
+  {
+    "id": "cab555cb-39b8-46fa-85b2-f51109ffd189",
+    "name": "Sports"
+  },
+  {
+    "id": "d4d03177-0f2d-472c-ba0c-1d835f0ff4d8",
+    "name": "Contest"
+  },
+  {
+    "id": "ae5d7b09-5f14-4a2a-ab03-7a78bdb9d83f",
+    "name": "Festival"
   }
 ]

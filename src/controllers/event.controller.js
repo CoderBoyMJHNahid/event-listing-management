@@ -6,6 +6,7 @@ import { extractThumbnail } from '../utils/extractThumbnail.js';
 const filePath = path.join(process.cwd(), 'src/data', 'events.json');
 const catFilePath = path.join(process.cwd(), 'src/data', 'categories.json');
 const galleryFilePath = path.join(process.cwd(), 'src/data', 'gallery.json');
+const userFilePath = path.join(process.cwd(), 'src/data', 'users.json');
 
 const uploadImage = async (req, res) => {
   try {
@@ -245,10 +246,14 @@ const fetchSummery = (req, res) => {
     const galleryData = fs.existsSync(galleryFilePath)
       ? JSON.parse(fs.readFileSync(galleryFilePath, 'utf-8'))
       : [];
+    const userData = fs.existsSync(userFilePath)
+      ? JSON.parse(fs.readFileSync(userFilePath, 'utf-8'))
+      : [];
 
     const totalEvents = eventData.length;
     const totalCategories = categoryData.length;
     const totalGalleryItems = galleryData.length;
+    const totalUsers = userData.length;
 
     // Group events by category
     const eventsByCategory = {};
@@ -280,6 +285,7 @@ const fetchSummery = (req, res) => {
       data: {
         totalEvents,
         totalCategories,
+        totalUsers,
         totalGalleryItems,
         eventsByCategory,
         eventsByType,

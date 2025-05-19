@@ -1,14 +1,32 @@
 [
   {
-    "id": "e73a0a6e-74fc-4a66-a280-03cea9f630ea",
-    "image": "1747433363129-931119178.png",
-    "imageTitle": "This is background image",
-    "categoryName": "Admission"
+    "id": "832f886a-04a8-49c0-9730-4476d1810695",
+    "image": "1747685172782-629696685.jpg",
+    "imageTitle": "ThinkSpire 12 Session 2 – Empowering Future Leaders at the University of Scholars",
+    "categoryName": "Seminar"
   },
   {
-    "id": "6096288a-8920-41e0-a82e-17ffa137aaae",
-    "image": "1747500026400-61295243.png",
-    "imageTitle": "This is a logo",
+    "id": "80d23e50-bdcd-4ab0-a287-b682ec9a72df",
+    "image": "1747685185221-380267890.jpg",
+    "imageTitle": "University of Scholars Inter Department Cricket Battle 2025",
+    "categoryName": "Sports"
+  },
+  {
+    "id": "18bc64f7-04b1-4e36-b4d3-3c45eb087528",
+    "image": "1747685206636-277050758.jpg",
+    "imageTitle": "University of Scholars Celebrates Its 1st Convocation Ceremony",
     "categoryName": "Convocation"
+  },
+  {
+    "id": "8eed8b36-b30e-49fb-9264-f821b86af1f1",
+    "image": "1747685219242-526823962.jpg",
+    "imageTitle": "Rangpur Riders vs Bowler Hunters – Clash of Titans in the 2025 Global Super League",
+    "categoryName": "Sports"
+  },
+  {
+    "id": "d044e819-fb1d-4bd9-b5cc-3f5c997d42df",
+    "image": "1747685416058-463812550.jpg",
+    "imageTitle": "Winter Pitha and Puli Festival",
+    "categoryName": "Festival"
   }
 ]
