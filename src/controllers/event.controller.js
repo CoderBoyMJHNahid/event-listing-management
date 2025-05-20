@@ -128,25 +128,45 @@ const fetchSingleEvent = (req, res) => {
     };
 
     // Top 5 upcoming events
-    const today = new Date();
-    const upcomingEvents = [...eventData]
-      .filter((e) => new Date(e.date) >= today && e.id !== id)
-      .sort((a, b) => new Date(a.date) - new Date(b.date))
+    const upcomingEventsRaw = [...eventData]
+      .filter((e) => e.type === 'Up Coming' && e.id !== id)
       .slice(0, 5);
 
+    const upcomingEvents = upcomingEventsRaw.map((event) => {
+      const cat = categoryData.find((c) => c.id === event.category);
+      return {
+        ...event,
+        category_name: cat ? cat.name : 'Unknown',
+      };
+    });
+
     // Top 5 most recent events
-    const mostRecentEvents = [...eventData]
+    const mostRecentEventsRaw = [...eventData]
       .filter((e) => e.id !== id)
       .sort((a, b) => new Date(b.date) - new Date(a.date))
       .slice(0, 5);
 
+    const mostRecentEvents = mostRecentEventsRaw.map((event) => {
+      const cat = categoryData.find((c) => c.id === event.category);
+      return {
+        ...event,
+        category_name: cat ? cat.name : 'Unknown',
+      };
+    });
+
     // 3 related events by same category, excluding current one, randomly
     const relatedEventsPool = eventData.filter(
-      (e) => e.category === event.category && e.id !== id
+      (e) => e.category === event.category && e.id !== id,
     );
 
     const shuffled = relatedEventsPool.sort(() => 0.5 - Math.random());
-    const relatedEvents = shuffled.slice(0, 3);
+    const relatedEvents = shuffled.slice(0, 3).map((event) => {
+      const cat = categoryData.find((c) => c.id === event.category);
+      return {
+        ...event,
+        category_name: cat ? cat.name : 'Unknown',
+      };
+    });
 
     res.status(200).json({
       success: true,
@@ -259,8 +279,9 @@ const fetchSummery = (req, res) => {
     const eventsByCategory = {};
     eventData.forEach((event) => {
       const category = categoryData.find((cat) => cat.id === event.category);
-      const categoryName = category ? category.name : "Unknown";
-      eventsByCategory[categoryName] = (eventsByCategory[categoryName] || 0) + 1;
+      const categoryName = category ? category.name : 'Unknown';
+      eventsByCategory[categoryName] =
+        (eventsByCategory[categoryName] || 0) + 1;
     });
 
     // Group events by type
@@ -294,17 +315,200 @@ const fetchSummery = (req, res) => {
       },
     });
   } catch (error) {
-    console.error("Error fetching summary:", error);
-    res.status(500).json({ message: "Internal server error" });
+    console.error('Error fetching summary:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+};
+
+const fetchAllEventsOrderedById = (req, res) => {
+  try {
+    if (!fs.existsSync(filePath)) {
+      return res.status(200).json({ success: true, data: [] });
+    }
+
+    const eventData = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+    const categoryData = fs.existsSync(catFilePath)
+      ? JSON.parse(fs.readFileSync(catFilePath, 'utf-8'))
+      : [];
+
+    const filteredEvents = eventData.filter(
+      (event) => event.type !== 'Up Coming',
+    );
+
+    const sortedEvents = [...filteredEvents].sort((a, b) => {
+      return new Date(b.date) - new Date(a.date);
+    });
+
+    const eventsWithCategoryName = sortedEvents.map((event) => {
+      const category = categoryData.find((cat) => cat.id === event.category);
+      return {
+        ...event,
+        category_name: category ? category.name : 'Unknown',
+      };
+    });
+
+    res.status(200).json({ success: true, data: eventsWithCategoryName });
+  } catch (error) {
+    console.error('Error fetching events ordered by date:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+};
+const fetchEventsByCategory = (req, res) => {
+  try {
+    const { categoryId } = req.params;
+
+    if (!categoryId) {
+      return res.status(400).json({
+        success: false,
+        message: 'Category ID is required.',
+      });
+    }
+
+    if (!fs.existsSync(filePath)) {
+      return res.status(200).json({ success: true, data: [] });
+    }
+
+    const eventData = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+    const categoryData = fs.existsSync(catFilePath)
+      ? JSON.parse(fs.readFileSync(catFilePath, 'utf-8'))
+      : [];
+
+    const category = categoryData.find((cat) => cat.id === categoryId);
+
+    if (!category) {
+      return res.status(404).json({
+        success: false,
+        message: 'Category not found.',
+      });
+    }
+
+    // Filter events by the specified category
+    const filteredEvents = eventData.filter(
+      (event) => event.category === categoryId,
+    );
+
+    // Add category name to each event
+    const eventsWithCategoryName = filteredEvents.map((event) => {
+      return {
+        ...event,
+        category_name: category.name,
+      };
+    });
+
+    res.status(200).json({
+      success: true,
+      data: eventsWithCategoryName,
+      category: category,
+    });
+  } catch (error) {
+    console.error('Error fetching events by category:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+};
+const fetchEventsByType = (req, res) => {
+  try {
+    const { type } = req.params;
+
+    if (!type) {
+      return res.status(400).json({
+        success: false,
+        message: 'Event type is required.',
+      });
+    }
+
+    if (!fs.existsSync(filePath)) {
+      return res.status(200).json({ success: true, data: [] });
+    }
+
+    const eventData = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+    const categoryData = fs.existsSync(catFilePath)
+      ? JSON.parse(fs.readFileSync(catFilePath, 'utf-8'))
+      : [];
+
+    // Filter events by the specified type
+    const filteredEvents = eventData.filter((event) => event.type === type);
+
+    if (filteredEvents.length === 0) {
+      return res.status(200).json({
+        success: true,
+        message: `No events found with type: ${type}`,
+        data: [],
+      });
+    }
+
+    // Add category name to each event
+    const eventsWithCategoryName = filteredEvents.map((event) => {
+      const category = categoryData.find((cat) => cat.id === event.category);
+      return {
+        ...event,
+        category_name: category ? category.name : 'Unknown',
+      };
+    });
+
+    res.status(200).json({
+      success: true,
+      data: eventsWithCategoryName,
+      type: type,
+    });
+  } catch (error) {
+    console.error('Error fetching events by type:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+};
+
+const searchEventsByTitle = (req, res) => {
+  try {
+    const { title } = req.query;
+
+    if (!title) {
+      return res.status(400).json({
+        success: false,
+        message: 'Search title is required.',
+      });
+    }
+
+    if (!fs.existsSync(filePath)) {
+      return res.status(200).json({ success: true, data: [] });
+    }
+
+    const eventData = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+    const categoryData = fs.existsSync(catFilePath)
+      ? JSON.parse(fs.readFileSync(catFilePath, 'utf-8'))
+      : [];
+
+    const searchTerm = title.toLowerCase();
+    const filteredEvents = eventData.filter((event) =>
+      event.title.toLowerCase().includes(searchTerm),
+    );
+
+    const eventsWithCategoryName = filteredEvents.map((event) => {
+      const category = categoryData.find((cat) => cat.id === event.category);
+      return {
+        ...event,
+        category_name: category ? category.name : 'Unknown',
+      };
+    });
+
+    res.status(200).json({
+      success: true,
+      data: eventsWithCategoryName,
+    });
+  } catch (error) {
+    console.error('Error searching events by title:', error);
+    res.status(500).json({ message: 'Internal server error' });
   }
 };
 
 export {
   uploadImage,
   insertEvent,
+  searchEventsByTitle,
   fetchAllEvents,
   fetchSingleEvent,
   updateEvent,
   deleteEvent,
-  fetchSummery
+  fetchSummery,
+  fetchAllEventsOrderedById,
+  fetchEventsByCategory,
+  fetchEventsByType,
 };
