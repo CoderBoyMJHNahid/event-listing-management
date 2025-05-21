@@ -1,26 +1,32 @@
 [
   {
     "id": "739f58dd-d025-439d-b499-91b2727f00f0",
-    "name": "Convocation"
+    "name": "Convocation",
+    "img": "1747811231716-648470873.jpg"
   },
   {
     "id": "eece81c9-f69a-4426-93e2-f3d024179e06",
-    "name": "Seminar"
+    "name": "Seminar",
+    "img": "1747811419887-844983282.jpg"
   },
   {
     "id": "cab555cb-39b8-46fa-85b2-f51109ffd189",
-    "name": "Sports"
+    "name": "Sports",
+    "img": "1747811630911-456546066.webp"
   },
   {
     "id": "d4d03177-0f2d-472c-ba0c-1d835f0ff4d8",
-    "name": "Contest"
+    "name": "Programming Contest",
+    "img": "1747811969364-922356159.webp"
   },
   {
     "id": "ae5d7b09-5f14-4a2a-ab03-7a78bdb9d83f",
-    "name": "Festival"
+    "name": "Festival",
+    "img": "1747812304447-935345537.webp"
   },
   {
     "id": "f3e33af8-0edc-42eb-b5dc-1cbce9d0533c",
-    "name": "Function"
+    "name": "Events",
+    "img": "1747812809665-650110002.webp"
   }
 ]

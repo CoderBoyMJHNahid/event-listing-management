@@ -17,6 +17,13 @@ const fetchAllCategory = async (req, res) => {
 const insertCategory = async (req, res) => {
   try {
     const { name } = req.body;
+    const imageFile = req.file;
+
+    if (!imageFile) {
+      return res
+        .status(400)
+        .json({ success: false, message: 'No image file uploaded.' });
+    }
 
     if (!name) {
       return res.status(400).json({ message: 'Category name is required.' });
@@ -42,22 +49,23 @@ const insertCategory = async (req, res) => {
     const newCategory = {
       id: uuidv4(),
       name: name.trim(),
+      img: imageFile.filename,
     };
 
     data.push(newCategory);
 
     await fs.writeFile(filePath, JSON.stringify(data, null, 2));
 
-    res.status(201).json({ 
+    res.status(201).json({
       success: true,
-      message: 'Category added successfully.', 
-      category: newCategory 
+      message: 'Category added successfully.',
+      category: newCategory,
     });
   } catch (error) {
     console.error('Error inserting category:', error);
-    res.status(500).json({ 
+    res.status(500).json({
       success: false,
-      message: 'Internal server error.' 
+      message: 'Internal server error.',
     });
   }
 };
@@ -68,9 +76,9 @@ const updateCategory = async (req, res) => {
     const { name } = req.body;
 
     if (!name) {
-      return res.status(400).json({ 
+      return res.status(400).json({
         success: false,
-        message: 'Category name is required.' 
+        message: 'Category name is required.',
       });
     }
 
@@ -79,35 +87,38 @@ const updateCategory = async (req, res) => {
       const fileContent = await fs.readFile(filePath, 'utf-8');
       data = JSON.parse(fileContent);
     } catch (err) {
-      return res.status(404).json({ 
+      return res.status(404).json({
         success: false,
-        message: 'Categories file not found.' 
+        message: 'Categories file not found.',
       });
     }
 
     // Find the category by ID
-    const categoryIndex = data.findIndex(cat => cat.id === id);
+    const categoryIndex = data.findIndex((cat) => cat.id === id);
     if (categoryIndex === -1) {
-      return res.status(404).json({ 
+      return res.status(404).json({
         success: false,
-        message: 'Category not found.' 
+        message: 'Category not found.',
       });
     }
 
     // Check for duplicate names (excluding the current category)
     const isDuplicate = data.some(
-      (cat, index) => index !== categoryIndex && 
-                    cat.name.toLowerCase() === name.toLowerCase(),
+      (cat, index) =>
+        index !== categoryIndex &&
+        cat.name.toLowerCase() === name.toLowerCase(),
     );
     if (isDuplicate) {
-      return res.status(409).json({ 
+      return res.status(409).json({
         success: false,
-        message: 'A category with this name already exists.' 
+        message: 'A category with this name already exists.',
       });
     }
 
-    // Update the category
     data[categoryIndex].name = name.trim();
+    if(req.file){
+      data[categoryIndex].img = req.file.filename;
+    }
 
     // Write back to the file
     await fs.writeFile(filePath, JSON.stringify(data, null, 2));
@@ -115,13 +126,13 @@ const updateCategory = async (req, res) => {
     res.status(200).json({
       success: true,
       message: 'Category updated successfully.',
-      category: data[categoryIndex]
+      category: data[categoryIndex],
     });
   } catch (error) {
     console.error('Error updating category:', error);
-    res.status(500).json({ 
+    res.status(500).json({
       success: false,
-      message: 'Internal server error.' 
+      message: 'Internal server error.',
     });
   }
 };
@@ -136,18 +147,18 @@ const deleteCategory = async (req, res) => {
       const fileContent = await fs.readFile(filePath, 'utf-8');
       data = JSON.parse(fileContent);
     } catch (err) {
-      return res.status(404).json({ 
+      return res.status(404).json({
         success: false,
-        message: 'Categories file not found.' 
+        message: 'Categories file not found.',
       });
     }
 
     // Find the category by ID
-    const categoryIndex = data.findIndex(cat => cat.id === id);
+    const categoryIndex = data.findIndex((cat) => cat.id === id);
     if (categoryIndex === -1) {
-      return res.status(404).json({ 
+      return res.status(404).json({
         success: false,
-        message: 'Category not found.' 
+        message: 'Category not found.',
       });
     }
 
@@ -161,13 +172,13 @@ const deleteCategory = async (req, res) => {
     res.status(200).json({
       success: true,
       message: 'Category deleted successfully.',
-      category: deletedCategory
+      category: deletedCategory,
     });
   } catch (error) {
     console.error('Error deleting category:', error);
-    res.status(500).json({ 
+    res.status(500).json({
       success: false,
-      message: 'Internal server error.' 
+      message: 'Internal server error.',
     });
   }
 };
@@ -182,38 +193,38 @@ const getCategoryById = async (req, res) => {
       const fileContent = await fs.readFile(filePath, 'utf-8');
       data = JSON.parse(fileContent);
     } catch (err) {
-      return res.status(404).json({ 
+      return res.status(404).json({
         success: false,
-        message: 'Categories file not found.' 
+        message: 'Categories file not found.',
       });
     }
 
     // Find the category by ID
-    const category = data.find(cat => cat.id === id);
+    const category = data.find((cat) => cat.id === id);
     if (!category) {
-      return res.status(404).json({ 
+      return res.status(404).json({
         success: false,
-        message: 'Category not found.' 
+        message: 'Category not found.',
       });
     }
 
     res.status(200).json({
       success: true,
-      category
+      category,
     });
   } catch (error) {
     console.error('Error fetching category:', error);
-    res.status(500).json({ 
+    res.status(500).json({
       success: false,
-      message: 'Internal server error.' 
+      message: 'Internal server error.',
     });
   }
 };
 
-export { 
-  insertCategory, 
-  fetchAllCategory, 
-  updateCategory, 
-  deleteCategory, 
-  getCategoryById 
+export {
+  insertCategory,
+  fetchAllCategory,
+  updateCategory,
+  deleteCategory,
+  getCategoryById,
 };

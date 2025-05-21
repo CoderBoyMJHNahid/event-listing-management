@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import upload from '../middlewares/multerMeddleware.js';
 import {
   deleteCategory,
   fetchAllCategory,
@@ -8,8 +9,11 @@ import {
 
 const catRoute = Router();
 
-catRoute.route('/').get(fetchAllCategory).post(insertCategory);
+catRoute
+  .route('/')
+  .get(fetchAllCategory)
+  .post(upload.single('categoryImg'), insertCategory);
 
-catRoute.route('/:id').put(updateCategory).delete(deleteCategory);
+catRoute.route('/:id').put(upload.single('editcategoryImg'),updateCategory).delete(deleteCategory);
 
 export default catRoute;
