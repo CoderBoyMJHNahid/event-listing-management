@@ -88,7 +88,10 @@ const fetchAllEvents = (req, res) => {
       ? JSON.parse(fs.readFileSync(catFilePath, 'utf-8'))
       : [];
 
-    const eventsWithCategoryName = eventData.map((event) => {
+    // Reverse the array to show latest posts first
+    const reversedEvents = [...eventData].reverse();
+
+    const eventsWithCategoryName = reversedEvents.map((event) => {
       const category = categoryData.find((cat) => cat.id === event.category);
       return {
         ...event,
@@ -127,9 +130,10 @@ const fetchSingleEvent = (req, res) => {
       category_name: category ? category.name : 'Unknown',
     };
 
-    // Top 5 upcoming events
+    // Top 5 upcoming events - reverse to show latest first
     const upcomingEventsRaw = [...eventData]
       .filter((e) => e.type === 'Up Coming' && e.id !== id)
+      .reverse()
       .slice(0, 5);
 
     const upcomingEvents = upcomingEventsRaw.map((event) => {
@@ -140,10 +144,10 @@ const fetchSingleEvent = (req, res) => {
       };
     });
 
-    // Top 5 most recent events
+    // Top 5 most recent events - reverse to show latest first
     const mostRecentEventsRaw = [...eventData]
       .filter((e) => e.id !== id)
-      .sort((a, b) => new Date(b.date) - new Date(a.date))
+      .reverse()
       .slice(0, 5);
 
     const mostRecentEvents = mostRecentEventsRaw.map((event) => {
@@ -292,13 +296,15 @@ const fetchSummery = (req, res) => {
 
     const today = new Date();
 
-    const upcomingEvents = eventData
+    // Reverse upcoming events to show latest first
+    const upcomingEvents = [...eventData]
       .filter((event) => new Date(event.date) >= today)
-      .sort((a, b) => new Date(a.date) - new Date(b.date))
+      .reverse()
       .slice(0, 5);
 
+    // Reverse recent events to show latest first
     const mostRecentEvents = [...eventData]
-      .sort((a, b) => new Date(b.date) - new Date(a.date))
+      .reverse()
       .slice(0, 5);
 
     res.status(200).json({
@@ -335,11 +341,10 @@ const fetchAllEventsOrderedById = (req, res) => {
       (event) => event.type !== 'Up Coming',
     );
 
-    const sortedEvents = [...filteredEvents].sort((a, b) => {
-      return new Date(b.date) - new Date(a.date);
-    });
+    // Reverse the filtered events to show latest first
+    const reversedEvents = [...filteredEvents].reverse();
 
-    const eventsWithCategoryName = sortedEvents.map((event) => {
+    const eventsWithCategoryName = reversedEvents.map((event) => {
       const category = categoryData.find((cat) => cat.id === event.category);
       return {
         ...event,
@@ -353,6 +358,7 @@ const fetchAllEventsOrderedById = (req, res) => {
     res.status(500).json({ message: 'Internal server error' });
   }
 };
+
 const fetchEventsByCategory = (req, res) => {
   try {
     const { categoryId } = req.params;
@@ -382,10 +388,10 @@ const fetchEventsByCategory = (req, res) => {
       });
     }
 
-    // Filter events by the specified category
-    const filteredEvents = eventData.filter(
-      (event) => event.category === categoryId,
-    );
+    // Filter events by the specified category and reverse to show latest first
+    const filteredEvents = eventData
+      .filter((event) => event.category === categoryId)
+      .reverse();
 
     // Add category name to each event
     const eventsWithCategoryName = filteredEvents.map((event) => {
@@ -405,6 +411,7 @@ const fetchEventsByCategory = (req, res) => {
     res.status(500).json({ message: 'Internal server error' });
   }
 };
+
 const fetchEventsByType = (req, res) => {
   try {
     const { type } = req.params;
@@ -425,8 +432,10 @@ const fetchEventsByType = (req, res) => {
       ? JSON.parse(fs.readFileSync(catFilePath, 'utf-8'))
       : [];
 
-    // Filter events by the specified type
-    const filteredEvents = eventData.filter((event) => event.type === type);
+    // Filter events by the specified type and reverse to show latest first
+    const filteredEvents = eventData
+      .filter((event) => event.type === type)
+      .reverse();
 
     if (filteredEvents.length === 0) {
       return res.status(200).json({
@@ -477,9 +486,11 @@ const searchEventsByTitle = (req, res) => {
       : [];
 
     const searchTerm = title.toLowerCase();
-    const filteredEvents = eventData.filter((event) =>
-      event.title.toLowerCase().includes(searchTerm),
-    );
+    
+    // Filter events by title and reverse to show latest first
+    const filteredEvents = eventData
+      .filter((event) => event.title.toLowerCase().includes(searchTerm))
+      .reverse();
 
     const eventsWithCategoryName = filteredEvents.map((event) => {
       const category = categoryData.find((cat) => cat.id === event.category);
